@@ -3,8 +3,8 @@ Created by V I E R U S   ||   Date 6/1/2023
 This code is a python Tkinter Caesar Cipher program.
 It has an adjustable shift section and you will be able to print both your encryption and decryption personal message
 -
-TODO
-Next update will fix the spacing problem, and include a file encryption and decryption section
+TODO v2.0
+Next update will fix the spacing problem, include a file encryption and decryption section, and fix clearErrorMessage message
 -
 Please Enjoy
 """
@@ -65,12 +65,15 @@ def clear():
     shiftchange.get()
     plaintextEn.get()
     plaintextDe.get()
+    
     if plaintextEn.get()=="" and plaintextDe.get()=="":
         clearErrorMessage = ("Error, Already cleared")
     else:
         shiftchange.set(4)
         plaintextEn.set("")
         plaintextDe.set("")
+        cipherEncryption.set("")
+        cipherDecryption.set("")
         
 
 #main--------------------------------------------------------------------------------------------------------------------------
@@ -116,8 +119,7 @@ ttk.Label(root, textvariable=cipherDecryption).grid(column=1, row=12)
 
 #Clear/Exit-----------------------------------------------------------------------------------------------------------------------------
 clearErrorMessage = StringVar()
-ttk.Label(root, text='').grid(column=0, row=13)
-ttk.Label(root, text='').grid(column=0, row=14)
+ttk.Label(root, text='').grid(column=0, row=13, rowspan=14)
 exitForm = ttk.Button(root, text="Exit", command=root.destroy).grid(column=0, row=15)
 clearForm = ttk.Button(root, text="Clear Form", command=clear).grid(column=1, row=15)
 ttk.Label(root, textvariable=clearErrorMessage).grid(column=1, row=16)
