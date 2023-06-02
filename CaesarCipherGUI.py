@@ -120,6 +120,7 @@ ttk.Label(root, textvariable=cipherDecryption).grid(column=1, row=12)
 #Clear/Exit-----------------------------------------------------------------------------------------------------------------------------
 clearErrorMessage = StringVar()
 ttk.Label(root, text='').grid(column=0, row=13, rowspan=14)
+
 exitForm = ttk.Button(root, text="Exit", command=root.destroy).grid(column=0, row=15)
 clearForm = ttk.Button(root, text="Clear Form", command=clear).grid(column=1, row=15)
 ttk.Label(root, textvariable=clearErrorMessage).grid(column=1, row=16)
