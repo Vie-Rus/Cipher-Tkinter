@@ -1,23 +1,92 @@
 """
-Created by V I E R U S   ||   Date 6/1/2023
+Created by V I E R U S   ||   Date 07/03/2023
 This code is a python Tkinter Caesar Cipher program.
-It has an adjustable shift section and you will be able to print both your encryption and decryption personal message
+It has an adjustable shift section and you will be able to print both your encryption and decryption personal message.
+It also has a file encryption and decryption file.
 -
-TODO v2.0
-Next update will fix the spacing problem, include a file encryption and decryption section, and fix clearErrorMessage message
+TODO
+Be able to clear form on file text file save, not found, error
+Add file random variable on shift
 -
 Please Enjoy
 """
-
-import tkinter
 from tkinter import *
-from tkinter import ttk
+from tkinter import filedialog
+
+def fileEncrypDecrypt():
+    def enfilecipher():
+        try:
+            with open(fileText, 'r') as file:
+                text = file.read()
+                cipherText = caesar_encrypt(text, shift)
+    
+            with open(output_file, 'w') as file:
+                file.write(cipherText)
+            
+            Label(endefileframe, text="File successfully encoded.").place(x=190, y=18)
+        except FileNotFoundError:
+            Label(endefileframe, text="File not found.").place(x=190, y=18)
+        except Exception as e:
+            Label(endefileframe, text=("An error occurred:", str(e))).place(x=190, y=18)
+
+    def caesar_encrypt(text, shift):
+        character = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+        number = '0123456789'
+        cipherText = ''
+        for chara in text:
+            if chara in character:
+                symbol_index = character.find(chara)
+                translationIndex = symbol_index - shift
+                if translationIndex >= len(character):
+                    translationIndex -= len(character)
+                elif translationIndex < 0:
+                    translationIndex += len(character)
+                cipherText += character[translationIndex]
+            else:
+                cipherText += chara
+        return cipherText
+
+    def defilecipher():
+        try:
+            with open(fileText, 'r') as file:
+                text = file.read()
+                plainText = caesar_decrypt(text, shift)
+            with open(output_file, 'w') as file:
+                file.write(plainText)
+            Label(endefileframe, text="File successfully encoded.").place(x=190, y=48)
+        except FileNotFoundError:
+            Label(endefileframe, text="File not found.").place(x=190, y=48)
+        except Exception as e:
+            Label(endefileframe, text=("An error occurred:", str(e))).place(x=190, y=48)
+
+    def caesar_decrypt(text, shift):
+        character = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+        plainText = ''
+        for chara in text:
+            if chara in character:
+                symbol_index = character.find(chara)
+                translationIndex = symbol_index + shift
+                if translationIndex >= len(character):
+                    translationIndex -= len(character)
+                elif translationIndex < 0:
+                    translationIndex += len(character)
+                plainText += character[translationIndex]
+            else:
+                plainText += chara
+        return plainText
+
+    fileText = filedialog.askopenfilename(title="open Text", filetypes=(("Text File", "*.txt"), ("Doc File", "*.docx"),))
+    output_file = fileText
+    shift = shiftchange.get()
+    Button(endefileframe, text='Encrypt >', command=enfilecipher).place(x=110, y=15)
+    Button(endefileframe, text='Decrypt >', command=defilecipher).place(x=110, y=45)
 
 def encryptMess():
     mode = 'encrypt'
     shift = shiftchange.get()
     EncryptMessage = plaintextEn.get()
-    character = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.!?$'
+    character = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    number = '0123456789'
     cipherText = ''
     for chara in EncryptMessage:
         if chara in character:
@@ -41,7 +110,7 @@ def decryptMess():
     mode = 'decrypt'
     shift = shiftchange.get()
     DecryptMessage = plaintextDe.get()
-    character = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.!?$'
+    character = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
     cipherText = ''
     for chara in DecryptMessage:
         if chara in character:
@@ -60,68 +129,80 @@ def decryptMess():
             
     cdeMessage = ("Your Decrypted message is: %s" % (cipherText))
     cipherDecryption.set(cdeMessage)
-    
+
 def clear():
     shiftchange.get()
     plaintextEn.get()
+    cipherEncryption.get()
     plaintextDe.get()
-    
-    if plaintextEn.get()=="" and plaintextDe.get()=="":
-        clearErrorMessage = ("Error, Already cleared")
+    cipherDecryption.get()
+    #cipherText1.get()
+    #plainText1.get()
+    # clearErrorMessage = StringVar()
+    if plaintextEn.get()=="" and plaintextDe.get()=="" and cipherEncryption.get=="" and cipherDecryption.get()=="":
+        Label(bottomFrame, text="clearErrorMessage").place(x=50, y=35)
     else:
         shiftchange.set(4)
         plaintextEn.set("")
-        plaintextDe.set("")
         cipherEncryption.set("")
+        plaintextDe.set("")
         cipherDecryption.set("")
-        
 
-#main--------------------------------------------------------------------------------------------------------------------------
-root = Tk()
+
+#Main--------------------------------------------------------------------------------------------------------------------------------------------
+root =  Tk() #before anything else
 root.title("Caesar Cipher")
-root.geometry("750x400")
+root.geometry('450x675')
+filenamePath = StringVar()
+filename = StringVar()
+#Shift------------------------------------------------------------------------------------------------------------------------
+shiftframe = LabelFrame(root, text="Change the shift or keep Default", padx=5, pady=5)
+shiftframe.pack(padx=10, pady=10, expand='yes', fill='both') 
 
-#Intro-------------------------------------------------------------------------------------------------------------------------
-ttk.Label(root, text="""Hello welcome to the Caesar Cipher. The Caesar Cipher was orginial made so Caesar could communicate in code to his armies.\n
-          With this code you, yourself can use the code and will be able to enter your code, change the shift and decrypt the code as well.\n
-          This code currently does not accept any numbers and only certain amount of symbols.\n
-          Enjoy!""").grid(column=0, row=1, columnspan=4)
-ttk.Label(root, text='').grid(column=0, row=2)
-
-#Shift--------------------------------------------------------------------------------------------------------------------------
-ttk.Label(text="You can change the shift or keep the default of 4").grid(column=0,row=3)
 shiftchange = IntVar()
 shiftchange.set(4)
-ttk.Radiobutton(text="4", value=4, variable=shiftchange).grid(sticky="W", column=1, row=3)
-ttk.Radiobutton(text="5", value=5, variable=shiftchange).grid(sticky="W", column=1, row=4)
-ttk.Radiobutton(text="6", value=6, variable=shiftchange).grid(sticky="W", column=1, row=5)
-ttk.Radiobutton(text="7", value=7, variable=shiftchange).grid(sticky="W", column=2, row=3)
-ttk.Radiobutton(text="8", value=8, variable=shiftchange).grid(sticky="W", column=2, row=4)
-ttk.Radiobutton(text="9", value=9, variable=shiftchange).grid(sticky="W", column=2, row=5)
+Radiobutton(shiftframe, text="4", value=4, variable=shiftchange).place(x=5, y=5)
+Radiobutton(shiftframe, text="5", value=5, variable=shiftchange).place(x=45, y=5)
+Radiobutton(shiftframe, text="6", value=6, variable=shiftchange).place(x=85, y=5)
+Radiobutton(shiftframe, text="7", value=7, variable=shiftchange).place(x=125, y=5)
+Radiobutton(shiftframe, text="8", value=8, variable=shiftchange).place(x=165, y=5)
+Radiobutton(shiftframe, text="9", value=9, variable=shiftchange).place(x=205, y=5)
+Radiobutton(shiftframe, text="10", value=10, variable=shiftchange).place(x=245, y=5)
 
-#Encrypt--------------------------------------------------------------------------------------------------------------------------
+#Encrypt------------------------------------------------------------------------------------------------------------------------
+encryptframe = LabelFrame(root, text="Encrypt Your Message", padx=5, pady=5)
+encryptframe.pack(padx=10, pady=10, expand='yes', fill='both') 
+
 cipherEncryption = StringVar()
-ttk.Label(root, text='').grid(column=0, row=6)
-ttk.Label(text="Encrypt Your Message:").grid(sticky="W", column=0, row=7)
 plaintextEn = StringVar()
-ttk.Entry(textvariable=plaintextEn, width=50).grid(column=1, row=7)
-ttk.Button(text="Encrypt >", command=encryptMess).grid(sticky="W", column=2, row=7)
-ttk.Label(root, textvariable=cipherEncryption).grid(column=1, row=9)
+Entry(encryptframe, textvariable=plaintextEn, width=50).place(x=5, y=5)
+Button(encryptframe, text=" Encrypt >", command=encryptMess).place(x=310, y=2)
+Label(encryptframe, textvariable=cipherEncryption).place(x=5, y=35)
 
 # Decrypt--------------------------------------------------------------------------------------------------------------------------
+decryptframe = LabelFrame(root, text="Decrypt Your Message", padx=5, pady=5)
+decryptframe.pack(padx=10, pady=10, expand='yes', fill='both') 
+
 cipherDecryption = StringVar()
-ttk.Label(root, text='').grid(column=0, row=10)
-ttk.Label(text="Decrypt the Message:").grid(sticky="W", column=0, row=11)
 plaintextDe = StringVar()
-ttk.Entry(textvariable=plaintextDe, width=50).grid(column=1, row=11)
-ttk.Button(text="Decrypt >", command=decryptMess).grid(sticky="W", column=2, row=11)
-ttk.Label(root, textvariable=cipherDecryption).grid(column=1, row=12)
+Entry(decryptframe, textvariable=plaintextDe, width=50).place(x=5, y=5)
+Button(decryptframe, text=" Decrypt >", command=decryptMess).place(x=310, y=2)
+Label(decryptframe, textvariable=cipherDecryption).place(x=5, y=35)
 
-#Clear/Exit-----------------------------------------------------------------------------------------------------------------------------
+# File---------------------------------------
+endefileframe = LabelFrame(root, text="Encrypt/Decrypt Your File", padx=5, pady=5)
+endefileframe.pack(padx=10, pady=10, expand='yes', fill='both') 
+
+#cipherText1 = StringVar()
+#plainText1 = StringVar()
+Button(endefileframe, text='Choose a File >', command=fileEncrypDecrypt).place(x=5, y=30)
+
+#Exit/clear form-------------------------------------------------------------------
+bottomFrame = LabelFrame(root, text="Exit/Clear Form", padx=5, pady=5)
+bottomFrame.pack(padx=10, pady=10, expand='yes', fill='both') 
+
 clearErrorMessage = StringVar()
-ttk.Label(root, text='').grid(column=0, row=13, rowspan=14)
+Button(bottomFrame, text=" Exit ", command=root.destroy).place(x=10, y=5)
+Button(bottomFrame, text=" Clear Form ", command=clear).place(x=50, y=5)
 
-exitForm = ttk.Button(root, text="Exit", command=root.destroy).grid(column=0, row=15)
-clearForm = ttk.Button(root, text="Clear Form", command=clear).grid(column=1, row=15)
-ttk.Label(root, textvariable=clearErrorMessage).grid(column=1, row=16)
 root.mainloop()
