@@ -6,7 +6,7 @@ It also has a file encryption and decryption file.
 -
 TODO
 Be able to clear form on file text file save, not found, error
-Add file random variable on shift
+Add file random (4-10) variable on shift
 -
 Please Enjoy
 """
@@ -155,6 +155,7 @@ root.title("Caesar Cipher")
 root.geometry('450x675')
 filenamePath = StringVar()
 filename = StringVar()
+
 #Shift------------------------------------------------------------------------------------------------------------------------
 shiftframe = LabelFrame(root, text="Change the shift or keep Default", padx=5, pady=5)
 shiftframe.pack(padx=10, pady=10, expand='yes', fill='both') 
@@ -193,8 +194,6 @@ Label(decryptframe, textvariable=cipherDecryption).place(x=5, y=35)
 endefileframe = LabelFrame(root, text="Encrypt/Decrypt Your File", padx=5, pady=5)
 endefileframe.pack(padx=10, pady=10, expand='yes', fill='both') 
 
-#cipherText1 = StringVar()
-#plainText1 = StringVar()
 Button(endefileframe, text='Choose a File >', command=fileEncrypDecrypt).place(x=5, y=30)
 
 #Exit/clear form-------------------------------------------------------------------
